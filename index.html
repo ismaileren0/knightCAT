@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1a0f33">
+<meta name="mobile-web-app-capable" content="yes">
+<title>KnightCat Endless Run</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="logos"><img class="lg-maku" src="logo-maku.png" alt="MAKÜ Dijital Gelişim Topluluğu"><img class="lg-hsd" src="logo-hsd.png" alt="Huawei Student Developers"></div>
+    <h1 lang="en">⚔ KnightCat Endless Run</h1>
+    <div class="tag">Sıralamayı geçebilir misin?</div>
+  </header>
+  <main>
+    <section id="stage">
+      <div id="wrap" data-stage="name">
+        <canvas id="c" width="960" height="540"></canvas>
+
+        <div id="hud">
+          <div class="pl"><small>OYUNCU</small><b id="pn">-</b></div>
+          <div><small>SKOR</small><b id="sc">0</b></div>
+          <div><small>REKOR</small><b id="hi">0</b></div>
+          <div><small>MESAFE</small><b id="di">0 m</b></div>
+          <div id="bd"></div>
+        </div>
+
+        <!-- 1) İsim girişi -->
+        <div id="nameScr" class="screen">
+          <h2 lang="en">KnightCat Endless Run</h2>
+          <p class="beat">🏆 Sıralamayı geçebilir misin?</p>
+          <form id="nameForm" autocomplete="off">
+            <label for="nm">Adını yaz ve maceraya başla:</label>
+            <div class="row2">
+              <input id="nm" maxlength="14" autocomplete="off" placeholder="Adın">
+              <button class="big small">DEVAM</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- 2) Hoşgeldin + skor tahtası -->
+        <div id="welcomeScr" class="screen hidden">
+          <h2 class="welcome">HOŞGELDİNİZ “<span id="wname"></span>”</h2>
+          <div id="lbBig"></div>
+          <p class="beat pulse">BAKALIM SIRALAMAYA GİREBİLECEK MİSİN</p>
+          <div class="bar"><i></i></div>
+        </div>
+
+        <!-- 2b) Karakter seçimi -->
+        <div id="charScr" class="screen hidden">
+          <h2>KARAKTERİNİ SEÇ</h2>
+          <div id="chars"></div>
+          <button id="charGo" class="big small">DEVAM</button>
+          <p class="help sm">Karta dokun ya da <kbd>←</kbd> <kbd>→</kbd> ile seç · <kbd>Enter</kbd> ile onayla</p>
+        </div>
+
+        <!-- 3) El algılama -->
+        <div id="handScr" class="screen hidden">
+          <h2>ELİNİ KAMERAYA GÖSTER</h2>
+          <div id="camrow">
+            <button id="sideL" type="button" class="sidebtn">SOL</button>
+            <div id="camslot"></div>
+            <button id="sideR" type="button" class="sidebtn">SAĞ</button>
+          </div>
+          <div id="info">
+            <p>✋ Elini <b>açık</b> tut, <b>avuç içi kameraya</b> baksın. Önce eli tanıt, sonra avucunu çizgideki bara getir.</p>
+            <p id="infoHow"></p>
+            <p>🐱 Engelleri aş, altınları topla (+50). 🛡 Kalkan ve ⭐ x2 güçlerini kap, her 5 engelde bonus efekt! Sıralamada yüksel.</p>
+          </div>
+          <div id="handMsg" class="note">⏳ Kamera hazırlanıyor…</div>
+          <div id="hact">
+            <button id="goBtn" class="big hidden">BAŞLA</button>
+            <button id="kbBtn" class="cambtn hidden">KLAVYE İLE DEVAM ET</button>
+          </div>
+        </div>
+
+        <div id="count" class="screen hidden">
+          <div id="cnum">3</div>
+          <p class="help">✋ Avucunu çizgideki <b>bara</b> getir, bar avucuna yapışsın</p>
+        </div>
+
+        <div id="over" class="screen hidden">
+          <h2>OYUN BİTTİ</h2>
+          <div class="final"><span id="fscore">0</span><small id="fnote"></small></div>
+          <p id="rank" class="beat"></p>
+          <div class="btns">
+            <button id="again" class="big small">TEKRAR OYNA</button>
+            <button id="next" class="big small alt">YENİ OYUNCU</button>
+          </div>
+        </div>
+
+        <!-- Dokunmatik butonlar (telefon/tablet) -->
+        <div id="tbD" class="tbtn duck"><i>▼</i>EĞİL</div>
+        <div id="tbJ" class="tbtn jump"><i>▲</i>ZIPLA</div>
+
+        <!-- QR kod: telefondan açmak için -->
+        <div id="qrBox"><canvas id="qrc" width="10" height="10"></canvas><span id="qrTxt">📱 Telefonda oyna<br>QR kodu okut</span></div>
+
+        <!-- El kamerası (önizleme) -->
+        <div id="cam" class="off">
+          <video id="vid" autoplay playsinline muted></video>
+          <canvas id="hc" width="640" height="480"></canvas>
+          <div id="trk" class="sideL">
+            <i class="tl"></i>
+            <div class="tz up" id="zUp"><s>▲<u> ZIPLA</u></s></div>
+            <div class="tz dn" id="zDn"><s>▼<u> EĞİL</u></s></div>
+            <div id="barZ"><b id="bar"></b></div>
+          </div>
+          <span id="hs">EL YOK</span>
+          <span id="gs"></span>
+        </div>
+      </div>
+    </section>
+
+    <div id="boardWrap">
+      <button id="clearBtn" type="button" tabindex="-1" title="Tüm oyuncuları ve skorları sil">🗑 LİSTEYİ SİL</button>
+      <aside id="board">
+        <h2>🏆 SIRALAMA</h2>
+        <div id="lb"></div>
+        <button id="fsBtn" type="button" tabindex="-1">⛶ TAM EKRAN</button>
+      </aside>
+    </div>
+  </main>
+</div>
+<div id="rot"><div><span>📱</span><b>Telefonunu yatay çevir</b><small>KnightCat Endless Run yatay ekranda oynanır</small></div></div>
+<script src="qr.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
