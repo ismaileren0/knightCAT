@@ -1,0 +1,30 @@
+KNIGHTCAT ENDLESS RUN - INTERNETSIZ SURUM
+=========================================
+
+NASIL ACILIR
+  Windows    : "OYUNU BASLAT (Windows).bat" dosyasina cift tikla.
+  Mac/Linux  : "OYUNU BASLAT (Mac-Linux).command" dosyasina cift tikla
+               (ya da terminalde: python3 sunucu.py)
+
+  Oyun tarayicida kendiliginden acilir (http://localhost:8080).
+  Kapatmak icin acilan siyah pencereyi kapat.
+
+NEDEN index.html'e direkt cift tiklanmiyor?
+  Tarayicilar, cift tikla acilan dosyalarda (file://) el takibi
+  modelinin yuklenmesine izin vermez. Baslatici dosyalar kucuk bir
+  yerel sunucu acar; internet gerekmez, hicbir sey kurulmaz.
+  (Sadece klavye/dokunma ile oynamak icin index.html'e direkt de tiklanabilir.)
+
+ILK ACILISTA
+  - Tarayici kamera izni ister: "Izin ver" de.
+  - Windows guvenlik uyarisi cikarsa "Ek bilgi" > "Yine de calistir" de.
+
+KLASORDEKILER
+  index.html, style.css, script.js, qr.js  -> oyun
+  logo-maku.png, logo-hsd.png             -> logolar
+  mediapipe/                              -> el takibi (yerel kopya)
+  knightcat-play.html                     -> tek dosyalik surum
+  sunucu.ps1 / sunucu.py                  -> yerel sunucu
+
+Not: Siralama tarayicinin hafizasinda tutulur; ayni tarayici ve ayni
+adres (localhost:8080) kullanildikca skorlar korunur.
